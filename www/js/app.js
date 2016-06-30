@@ -8,7 +8,7 @@ angular.module('chat-app', ['ionic', 'firebase'])
     return firebase.initializeApp(config);
 })
 
-.controller("AppCtrl", ['FB', '$firebaseAuth', '$firebaseArray', '$scope', '$ionicLoading', '$ionicScrollDelegate', function(FB, $firebaseAuth, $firebaseArray, $scope, $ionicLoading, $ionicScrollDelegate) {
+.controller("AppCtrl", ['FB', '$firebaseAuth', '$firebaseArray', '$scope', '$ionicScrollDelegate', function(FB, $firebaseAuth, $firebaseArray, $scope, $ionicScrollDelegate) {
     //Init firebaseAuth instance
     var Auth = $firebaseAuth();
 
@@ -24,7 +24,6 @@ angular.module('chat-app', ['ionic', 'firebase'])
     });
 
     $scope.createUser = function(user) {
-        $ionicLoading.show();
         Auth.$createUserWithEmailAndPassword(user.email, user.password)
             .then(function() {
                 //user created successfully, then log them in
@@ -32,17 +31,14 @@ angular.module('chat-app', ['ionic', 'firebase'])
             })
             .then(function(authData) {
                 console.log("User created with data: ", authData);
-                $ionicLoading.hide();
             }).catch(function(error) {
                 console.log("Error has occured: ", error);
             });
     }
 
     $scope.loginUser = function(user) {
-        $ionicLoading.show();
         Auth.$signInWithEmailAndPassword(user.email, user.password)
             .then(function(authData) {
-                $ionicLoading.hide();
                 console.log("Signed in as:", authData.uid);
                 $scope.loggedInUser = authData;
             }).catch(function(error) {
